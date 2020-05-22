@@ -11,12 +11,31 @@
 
 <body>
     <div id="data" align="center"></div>
-    <table align="center" id="table" />
+    <table align="center" id="table">
+        <th>
+            pulling data
+        </th>
+    </table>
+    <div id="notes">
+        <br>
+        <b>Notes: </b>
+        <br>
+        1. Website Hosted on GitHub here:
+        <a href="https://github.com/vishwarajanand/SgWeather">
+            https://github.com/vishwarajanand/SgWeather
+        </a>
+        <br>
+        2. Data provided by api.data.gov.sg here:
+        <a href="https://api.data.gov.sg/v1/environment/2-hour-weather-forecast">
+            https://api.data.gov.sg/v1/environment/2-hour-weather-forecast
+        </a>
+    </div>
     <script type="text/javascript">
         function constructTable(list, selector) {
             if (list === undefined || !Array.isArray(list) || list.length <= 0) {
                 return;
             }
+            $(selector).html("");
             // Getting the all column names 
             var cols = Headers(list, selector);
             // Traversing the JSON data 
@@ -56,7 +75,7 @@
 
         function handle_error() {
             console.log("Some error occurred")
-            $("#data").innerHTML("<H1>Website not working, contact the owner!</H1>");
+            $("#data").html("<H1>Website loading failed, try refreshing or contact the owner!</H1>");
         }
 
         var xhr = new XMLHttpRequest();
@@ -95,13 +114,6 @@
             }
         });
     </script>
-    <div id="notes">
-        Notes: <br>
-        1. Website Hosted on GitHub here: <a
-            href="https://github.com/vishwarajanand/SgWeather">https://github.com/vishwarajanand/SgWeather</a>
-        <br>2. Data provided by api.data.gov.sg here: <a
-            href="https://api.data.gov.sg/v1/environment/2-hour-weather-forecast">https://api.data.gov.sg/v1/environment/2-hour-weather-forecast</a>
-    </div>
 </body>
 
 </html>
