@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SG Weather Now</title>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"> </script> -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"> </script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"> </script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+</head>
+
+<body>
+    <div id="data" align="center"></div>
+    <table align="center" id="table" />
+    <script type="text/javascript">
+        function constructTable(list, selector) {
+            if (list === undefined || !Array.isArray(list) || list.length <= 0) {
+                return;
+            }
+            // Getting the all column names 
+            var cols = Headers(list, selector);
+            // Traversing the JSON data 
+            for (var i = 0; i < list.length; i++) {
+                var key = list[i][cols[0]].toLowerCase().replace(/\s+/g, '');
+                var row = $('<tr id="' + key + '"/>');
+                for (var colIndex = 0; colIndex < cols.length; colIndex++) {
+                    var val = list[i][cols[colIndex]];
+                    // If there is any key, which is matching 
+                    // with the column name 
+                    if (val == null) val = "";
+                    row.append($('<td/>').html(val));
+                }
+                // Adding each row to the table 
+                $(selector).append(row);
+            }
+        }
+
+        function Headers(list, selector) {
+            var columns = [];
+            var header = $('<tr/>');
+            for (var i = 0; i < list.length; i++) {
+                var row = list[i];
+                for (var k in row) {
+                    if ($.inArray(k, columns) == -1) {
+                        columns.push(k);
+                        // Creating the header 
+                        header.append($('<th/>').html(k.toUpperCase()));
+                    }
+                }
+            }
+
+            // Appending the header to the table 
+            $(selector).append(header);
+            return columns;
+        }
+
+        function handle_error() {
+            console.log("Some error occurred")
+            $("#data").innerHTML("<H1>Website not working, contact the owner!</H1>");
+        }
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://api.data.gov.sg/v1/environment/2-hour-weather-forecast');
+        xhr.onload = function (e) {
+            var jsonReport = JSON.parse(xhr.response);
+            var data = jsonReport.items[0].forecasts;
+            console.log("data pulled");
+            constructTable(data, '#table');
+            document.getElementById("data").innerHTML = "<h1>Showing Singapore Weather Reports <h1>" +
+                "<h4><p><br><b>From:</b><br><i>" +
+                Date(jsonReport.items[0].valid_period.start).toString() +
+                "</i><br><b>To: </b><br><i>" +
+                Date(jsonReport.items[0].valid_period.end).toString() +
+                "</i></p></h4>";
+            // $("#table").DataTable({
+            //     bSort: false,
+            //     aoColumns: [{ sWidth: "45%" }, { sWidth: "45%" }, { sWidth: "10%", bSearchable: false, bSortable: false }],
+            //     "scrollY": "200px",
+            //     "scrollCollapse": true,
+            //     "info": true,
+            //     "paging": true
+            // });
+            console.log("data displayed");
+        }
+        xhr.onerror = function () {
+            handle_error();
+        }
+        $(document).ready(function () {
+            try {
+                xhr.send();
+            }
+            catch (error) {
+                handle_error();
+                console.error(error);
+            }
+        });
+    </script>
+    <div id="notes">
+        Notes: <br>
+        1. Website Hosted on GitHub here: <a
+            href="https://github.com/vishwarajanand/SgWeather">https://github.com/vishwarajanand/SgWeather</a>
+        <br>2. Data provided by api.data.gov.sg here: <a
+            href="https://api.data.gov.sg/v1/environment/2-hour-weather-forecast">https://api.data.gov.sg/v1/environment/2-hour-weather-forecast</a>
+    </div>
+</body>
+
+</html>
