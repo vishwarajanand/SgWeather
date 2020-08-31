@@ -99,7 +99,10 @@
             //     "info": true,
             //     "paging": true
             // });
-            location.href = self.href;
+            if (location.hash){
+                console.log("Show anchor tag row!");
+                $('html, body').animate({ scrollTop: $(location.hash).offset().top}, 1000);
+            }
             console.log("data displayed");
         }
         xhr.onerror = function () {
