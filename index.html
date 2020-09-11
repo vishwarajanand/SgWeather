@@ -87,9 +87,9 @@
             constructTable(data, '#table');
             document.getElementById("data").innerHTML = "<h1>Showing Singapore Weather Reports <h1>" +
                 "<h4><p><br><b>From:</b><br><i>" +
-                Date(jsonReport.items[0].valid_period.start).toString() +
+                (new Date(jsonReport.items[0].valid_period.start)).toString() +
                 "</i><br><b>To: </b><br><i>" +
-                Date(jsonReport.items[0].valid_period.end).toString() +
+                (new Date(jsonReport.items[0].valid_period.end)).toString() +
                 "</i></p></h4>";
             // $("#table").DataTable({
             //     bSort: false,
